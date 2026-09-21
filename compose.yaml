@@ -1,0 +1,16 @@
+services:
+  vehicle-terminal:
+    build: .
+    ports: ["18204:18204"]
+    environment:
+      PORT: 18204
+      VEHICLE_API_KEY: ${VEHICLE_API_KEY:-zhuatech-demo-key}
+      VEHICLE_DATA_FILE: /app/data/vehicle-terminal.json
+    volumes: ["vehicle-data:/app/data"]
+    healthcheck:
+      test: ["CMD","wget","-qO-","http://127.0.0.1:18204/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+volumes:
+  vehicle-data:
